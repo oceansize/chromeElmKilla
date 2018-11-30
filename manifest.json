@@ -1,0 +1,28 @@
+{
+  "name": "Elm KILLA",
+  "version": "1.0",
+  "description": "The quickest way to kill/hide the elm debug window",
+  "permissions": ["activeTab",
+                  "tabs",
+                  "declarativeContent",
+                  "storage"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "images/elm-dies16.png",
+      "32": "images/elm-dies32.png",
+      "48": "images/elm-dies48.png",
+      "128": "images/elm-dies128.png"
+    }
+  },
+  "icons": {
+    "16": "images/elm-dies16.png",
+    "32": "images/elm-dies32.png",
+    "48": "images/elm-dies48.png",
+    "128": "images/elm-dies128.png"
+  },
+  "manifest_version": 2
+}

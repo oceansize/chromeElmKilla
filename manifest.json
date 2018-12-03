@@ -12,10 +12,10 @@
   },
   "browser_action": {
     "default_icon": {
-      "16": "images/elm-dies16.png",
-      "32": "images/elm-dies32.png",
-      "48": "images/elm-dies48.png",
-      "128": "images/elm-dies128.png"
+      "16": "images/elm-lives16.png",
+      "32": "images/elm-lives32.png",
+      "48": "images/elm-lives48.png",
+      "128": "images/elm-lives128.png"
     }
   },
   "icons": {

@@ -1,10 +1,13 @@
+chrome.storage.local.set({ crimeScene: false });
+chrome.browserAction.onClicked.addListener(releaseTheKiller);
+chrome.storage.local.get(["crimeScene"], function(result) {
+  console.log(result.crimeScene);
+})
+
 function releaseTheKiller() {
   chrome.tabs.executeScript(null, { file: "./kill-elm-dead.js" });
+  toggleIcon();
 };
-
-chrome.browserAction.onClicked.addListener(releaseTheKiller);
-chrome.storage.local.set({ crimeScene: false });
-chrome.browserAction.onClicked.addListener(toggleIcon);
 
 function toggleIcon() {
   return chrome.storage.local.get(["crimeScene"], function(result) {

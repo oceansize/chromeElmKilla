@@ -1,6 +1,7 @@
 {
   "name": "Elm KILLA",
-  "version": "1.0",
+  "version": "1.0.0.2",
+  "author": "Roi Driscoll & Stepan Khodzhaian for Carwow",
   "description": "The quickest way to kill/hide the elm debug window",
   "permissions": ["activeTab",
                   "tabs",

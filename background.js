@@ -1,6 +1,27 @@
-chrome.browserAction.onClicked.addListener(releaseTheKillerAndWarnTheTown);
-chrome.tabs.onUpdated.addListener(releaseTheKiller);
-chrome.tabs.onActivated.addListener(releaseTheKiller);
+chrome.browserAction.onClicked.addListener(callTheKiller);
+chrome.tabs.onUpdated.addListener(callTheKillerBack);
+chrome.tabs.onActivated.addListener(callTheKillerBack);
+
+function callTheKiller() {
+  checkCommunityAndTerrorize(releaseTheKillerAndWarnTheTown);
+};
+
+function callTheKillerBack() {
+  checkCommunityAndTerrorize(releaseTheKiller);
+};
+
+function checkCommunityAndTerrorize(callback) {
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+    let url = tabs[0].url;
+    if (url.includes("https://") || url.includes("http://")) {
+      callback();
+    }
+  })
+};
+
+function validateUrl() {
+  var url = getTabUrl();
+};
 
 function releaseTheKiller() {
   chrome.tabs.executeScript(null, { file: "./kill-elm-dead.js" });

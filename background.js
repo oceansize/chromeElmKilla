@@ -1,21 +1,20 @@
-chrome.storage.local.set({ crimeScene: false });
-chrome.browserAction.onClicked.addListener(releaseTheKiller);
-chrome.storage.local.get(["crimeScene"], function(result) {
-  console.log(result.crimeScene);
-})
+chrome.browserAction.onClicked.addListener(releaseTheKillerAndWarnTheTown);
+chrome.tabs.onUpdated.addListener(releaseTheKiller);
+chrome.tabs.onActivated.addListener(releaseTheKiller);
 
 function releaseTheKiller() {
   chrome.tabs.executeScript(null, { file: "./kill-elm-dead.js" });
-  toggleIcon();
 };
 
-function toggleIcon() {
-  return chrome.storage.local.get(["crimeScene"], function(result) {
-    result.crimeScene ? switchIconOn() : switchIconOff();
-  })
+function releaseTheKillerAndWarnTheTown() {
+  chrome.storage.local.get(["crimeScene"], function(result) {
+    result.crimeScene ? coverItUp() : warnTheTown();
+    chrome.storage.local.set({ "crimeScene": !result.crimeScene });
+    releaseTheKiller();
+  });
 };
 
-function switchIconOn() {
+function warnTheTown() {
   chrome.browserAction.setIcon({
     path : {
       "16": "images/elm-lives16.png",
@@ -26,7 +25,7 @@ function switchIconOn() {
   });
 }
 
-function switchIconOff() {
+function coverItUp() {
   chrome.browserAction.setIcon({
     path : {
       "16": "images/elm-dies16.png",

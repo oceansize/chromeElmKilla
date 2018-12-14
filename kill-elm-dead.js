@@ -7,12 +7,6 @@ function findVictims(){
   return markedForDeath;
 }
 
-function getCrimeSceneStatus() {
-  return chrome.storage.local.get(["crimeScene"], function(result) {
-    return result.crimeScene;
-  });
-};
-
 function toggleLife(status) {
   findVictims().forEach(obj => {
     obj.style.display = status;
@@ -22,7 +16,6 @@ function toggleLife(status) {
 (function whoLivesWhoDies() {
   return chrome.storage.local.get(["crimeScene"], function(result) {
     toggleLife(result.crimeScene ? "block" : "none");
-    chrome.storage.local.set({ crimeScene: !result.crimeScene });
   });
 })();
 

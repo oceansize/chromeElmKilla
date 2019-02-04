@@ -7,7 +7,6 @@ function initializeScript() {
 };
 
 function runScript() {
-  console.log('script run');
   verifyTabs(triggerElmKillaScript);
 };
 

@@ -1,17 +1,17 @@
-chrome.browserAction.onClicked.addListener(callTheKiller);
-chrome.tabs.onUpdated.addListener(callTheKillerBack);
-chrome.tabs.onActivated.addListener(callTheKillerBack);
+chrome.browserAction.onClicked.addListener(initializeScript);
+chrome.tabs.onUpdated.addListener(runScript);
+chrome.tabs.onActivated.addListener(runScript);
 
-function callTheKiller() {
-  checkCommunityAndTerrorize(releaseTheKillerAndWarnTheTown);
+function initializeScript() {
+  verifyTabs(setStateAndRunScript);
 };
 
-function callTheKillerBack() {
-  checkCommunityAndTerrorize(releaseTheKiller);
+function runScript() {
+  verifyTabs(triggerElmKillaScript);
 };
 
-function checkCommunityAndTerrorize(callback) {
-  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+function verifyTabs(callback) {
+  chrome.tabs.query({ 'active': true }, function (tabs) {
     let url = tabs[0].url;
     if (url.includes("https://") || url.includes("http://")) {
       callback();
@@ -19,23 +19,23 @@ function checkCommunityAndTerrorize(callback) {
   })
 };
 
-function validateUrl() {
-  var url = getTabUrl();
+function triggerElmKillaScript() {
+  chrome.tabs.executeScript(null, { file: "./elm-killa-script.js" });
 };
 
-function releaseTheKiller() {
-  chrome.tabs.executeScript(null, { file: "./kill-elm-dead.js" });
+function setStateAndRunScript() {
+  setStatus(triggerElmKillaScript);
 };
 
-function releaseTheKillerAndWarnTheTown() {
-  chrome.storage.local.get(["crimeScene"], function(result) {
-    result.crimeScene ? coverItUp() : warnTheTown();
-    chrome.storage.local.set({ "crimeScene": !result.crimeScene });
-    releaseTheKiller();
+function setStatus(callback) {
+  chrome.storage.local.get(["elmDebuggerVisible"], function(result) {
+    result.elmDebuggerVisible ? setActiveIcon() : setInactiveIcon();
+    chrome.storage.local.set({ "elmDebuggerVisible": !result.elmDebuggerVisible });
+    callback();
   });
-};
+}
 
-function warnTheTown() {
+function setInactiveIcon() {
   chrome.browserAction.setIcon({
     path : {
       "16": "images/elm-lives16.png",
@@ -46,7 +46,7 @@ function warnTheTown() {
   });
 }
 
-function coverItUp() {
+function setActiveIcon() {
   chrome.browserAction.setIcon({
     path : {
       "16": "images/elm-dies16.png",

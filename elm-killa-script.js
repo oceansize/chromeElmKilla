@@ -1,10 +1,6 @@
 function locateElementsToHide(){
-  let getAllDivs = document.getElementsByTagName('div');
-  let arrayOfDivs = Array.from(getAllDivs);
-  let elmDebuggerDivs = arrayOfDivs.filter(obj => {
-    return obj.style.bottom ==="0px" && obj.style.right ==="6px" && obj.style.position === "fixed";
-  });
-  return elmDebuggerDivs;
+  let elmDebuggerWindows = document.querySelectorAll("[data-elm-hot]");
+  return Array.from(elmDebuggerWindows);
 }
 
 function toggleVisibility(status) {
@@ -14,8 +10,8 @@ function toggleVisibility(status) {
 };
 
 (function applyStyles() {
-  return chrome.storage.local.get(["elmDebuggerVisible"], function(result) {
-    toggleVisibility(result.elmDebuggerVisible ? "block" : "none");
+  return chrome.storage.local.get(["elmKillaActive"], function(result) {
+    toggleVisibility(result.elmKillaActive ? "none" : "block");
   });
 })();
 

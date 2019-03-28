@@ -1,37 +1,47 @@
-chrome.browserAction.onClicked.addListener(initializeScript);
-chrome.tabs.onUpdated.addListener(runScript);
-chrome.tabs.onActivated.addListener(runScript);
+checkElmKillaStatus(setIcon);
+chrome.browserAction.onClicked.addListener(toggleElmKilla);
+chrome.tabs.onUpdated.addListener(tabUpdated);
 
 function initializeScript() {
   verifyTabs(setStateAndRunScript);
 };
 
-function runScript() {
-  verifyTabs(triggerElmKillaScript);
-};
+function tabUpdated(tabID, changeInfo, tab) {
+  let isTabReady = changeInfo.status === 'complete';
 
-function verifyTabs(callback) {
-  chrome.tabs.query({ 'active': true }, function (tabs) {
-    let url = tabs[0].url;
-    if (url.includes("https://") || url.includes("http://")) {
-      callback();
+  checkElmKillaStatus((status) => {
+    if (isTabReady && status) {
+      runElmKilla(tab);
     }
-  })
+  });
 };
 
-function triggerElmKillaScript() {
-  chrome.tabs.executeScript(null, { file: "./elm-killa-script.js" });
+function setIcon(status) {
+  status ? setActiveIcon() : setInactiveIcon();
 };
 
-function setStateAndRunScript() {
-  setStatus(triggerElmKillaScript);
+function runElmKilla(tab) {
+  if (tab.url.search(/https?:\/\//) === 0) {
+    chrome.tabs.executeScript(tab.id, { file: "./elm-killa-script.js" });
+  };
 };
 
-function setStatus(callback) {
-  chrome.storage.local.get(["elmDebuggerVisible"], function(result) {
-    result.elmDebuggerVisible ? setActiveIcon() : setInactiveIcon();
-    chrome.storage.local.set({ "elmDebuggerVisible": !result.elmDebuggerVisible });
-    callback();
+function toggleElmKilla() {
+  checkElmKillaStatus((status) => {
+    status = !status;
+    chrome.storage.local.set({ "elmKillaActive": status });
+    setIcon(status);
+    chrome.tabs.query({}, (tabs) => {
+      tabs.forEach((tab) => {
+        runElmKilla(tab);
+      });
+    });
+  });
+};
+
+function checkElmKillaStatus(callback) {
+  chrome.storage.local.get(["elmKillaActive"], function(result) {
+    callback(result.elmKillaActive);
   });
 }
 
